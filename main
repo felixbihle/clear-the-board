@@ -1,0 +1,104 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 22 11:21:52 2023
+
+@author: felix
+"""
+
+import random
+'''import sys
+sys.path.append("/Python311/Lib/site-packages")
+import keyboard'''
+
+maze = [[" --", "---", "---", "---", "---", "---", "---", "---", "---", "-- "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
+        [" --", "---", "---", "---", "---", "---", "---", "---", "---", "-- "]]
+
+def area():
+    i = 0
+    j = 0
+    for i in range(0, 10):
+        line = ""
+        for j in range(0, 10):
+            line = line + maze[i][j]
+        print(line)
+
+chara = " * "
+row = random.randint(1,8)
+col = random.randint(1,8)
+
+def char(x, y):
+    row = x
+    col = y
+    maze[row][col] = chara
+
+def move():
+    
+    state = "playing"
+    
+    global row
+    global col
+    #maze[row][col] = chara
+    char(row, col)
+    count = 0
+    moves = 0
+    
+    while state == "playing":
+        char(row, col)
+        area()
+        where = input("direction: ")
+        count += 1
+        moves += 1
+        
+        if where == "up" or where == "w":
+            maze[row][col] = "   "
+            row -= 1
+
+        elif where == "down" or where =="s":
+            maze[row][col] = "   "
+            row += 1
+            
+        elif where == "right" or where == "d":
+            maze[row][col] = "   "
+            col += 1
+            
+        elif where == "left" or where =="a":
+            maze[row][col] = "   "
+            col -= 1
+        else:
+            print("invalid direction")
+        
+        if count == 10:
+            rrow = random.randint(1,8)
+            rcol = random.randint(1,8)
+            while maze[rrow][rcol] == " x ":
+                rrow = random.randint(1,8)
+                rcol = random.randint(1,8)
+            if maze[rrow][rcol] == "   ":
+                maze[rrow][rcol] = " x "
+            count = 0
+        
+        if maze[row][col] == " x ":
+            continue
+            #print("bwa")
+        elif maze[row][col] == "---" or maze[row][col] == " | ":
+            print("gonk")
+            print("You lose")
+            break
+        
+        if any(" x " in mazes for mazes in maze):
+            continue
+        else:
+            print("win in", moves, "moves")
+            break
+
+char(row, col)
+#area()
+move()
