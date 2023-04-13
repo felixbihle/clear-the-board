@@ -1,14 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 22 11:21:52 2023
-
-@author: felix
-"""
-
 import random
-'''import sys
-sys.path.append("/Python311/Lib/site-packages")
-import keyboard'''
+import keyboard
+
 
 maze = [[" --", "---", "---", "---", "---", "---", "---", "---", "---", "-- "],
         [" | ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " x ", " | "],
@@ -45,60 +37,62 @@ def move():
     
     global row
     global col
-    #maze[row][col] = chara
     char(row, col)
     count = 0
     moves = 0
-    
+    not_pressed = True
     while state == "playing":
         char(row, col)
         area()
-        where = input("direction: ")
-        count += 1
-        moves += 1
+        where = keyboard.read_key(suppress = True)
         
-        if where == "up" or where == "w":
-            maze[row][col] = "   "
-            row -= 1
-
-        elif where == "down" or where =="s":
-            maze[row][col] = "   "
-            row += 1
+        if not_pressed:
+            count += 1
+            moves += 1
+            if where == "w" or where == "up arrow":
+                maze[row][col] = "   "
+                row -= 1
+            elif where == "s" or where == "down arrow":
+                maze[row][col] = "   "
+                row += 1
+            elif where == "d" or where == "right arrow":
+                maze[row][col] = "   "
+                col += 1
+            elif where == "a" or where == "left arrow":
+                maze[row][col] = "   "
+                col -= 1
+            elif where == "esc":
+                break
+            else:
+                print("invalid direction")
+            not_pressed = False
             
-        elif where == "right" or where == "d":
-            maze[row][col] = "   "
-            col += 1
-            
-        elif where == "left" or where =="a":
-            maze[row][col] = "   "
-            col -= 1
-        else:
-            print("invalid direction")
-        
-        if count == 10:
-            rrow = random.randint(1,8)
-            rcol = random.randint(1,8)
-            while maze[rrow][rcol] == " x ":
+            if count == 8:
                 rrow = random.randint(1,8)
                 rcol = random.randint(1,8)
-            if maze[rrow][rcol] == "   ":
-                maze[rrow][rcol] = " x "
-            count = 0
+                while maze[rrow][rcol] == " x ":
+                    rrow = random.randint(1,8)
+                    rcol = random.randint(1,8)
+                if maze[rrow][rcol] == "   ":
+                    maze[rrow][rcol] = " x "
+                count = 0
+            
+            if maze[row][col] == " x ":
+                continue
+                #print("bwa")
+            elif maze[row][col] == "---" or maze[row][col] == " | ":
+                print("gonk")
+                print("You lose")
+                break
+        else:
+            not_pressed = True
         
-        if maze[row][col] == " x ":
-            continue
-            #print("bwa")
-        elif maze[row][col] == "---" or maze[row][col] == " | ":
-            print("gonk")
-            print("You lose")
-            break
         
         if any(" x " in mazes for mazes in maze):
             continue
         else:
-            print("win in", moves, "moves")
+            print("win", moves)
             break
-
+        
 char(row, col)
-#area()
 move()
